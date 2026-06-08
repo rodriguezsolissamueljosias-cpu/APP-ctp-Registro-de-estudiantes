@@ -1,0 +1,17 @@
+{
+  "name": "ctp-platanar",
+  "version": "1.0.0",
+  "description": "CTP Platanar - Sistema de Asistencia Web",
+  "scripts": {
+    "install-deps": "npm install && cd ctp-platanar-backend && npm install && cd ../ctp-platanar-frontend && npm install",
+    "backend": "cd ctp-platanar-backend && npm start",
+    "backend:dev": "cd ctp-platanar-backend && npm run dev",
+    "frontend": "cd ctp-platanar-frontend && npm start",
+    "start": "npm run backend & npm run frontend",
+    "build-frontend": "cd ctp-platanar-frontend && npm run build",
+    "clean": "rmdir /s /q ctp-platanar-frontend\\build 2>nul; exit /b 0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
