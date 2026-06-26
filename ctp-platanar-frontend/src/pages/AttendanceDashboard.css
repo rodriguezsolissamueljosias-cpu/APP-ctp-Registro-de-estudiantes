@@ -1,0 +1,331 @@
+.attendance-dashboard {
+  width: 100%;
+}
+
+.attendance-dashboard .container {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.attendance-header {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  padding: 30px;
+}
+
+.attendance-header h2 {
+  color: white;
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  border: none;
+  padding: 0;
+}
+
+.header-subtitle {
+  margin: 0;
+  opacity: 0.95;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ===== STATS ===== */
+.attendance-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 25px 30px;
+  background: linear-gradient(135deg, #f5f7ff 0%, #f0f2ff 100%);
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.stat-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stat-present {
+  border-top: 4px solid #4facfe;
+}
+
+.stat-present .stat-value {
+  color: #4facfe;
+}
+
+.stat-late {
+  border-top: 4px solid #fa709a;
+}
+
+.stat-late .stat-value {
+  color: #fa709a;
+}
+
+.stat-absent {
+  border-top: 4px solid #f5576c;
+}
+
+.stat-absent .stat-value {
+  color: #f5576c;
+}
+
+/* ===== LOADING ===== */
+.loading {
+  padding: 60px 30px;
+  text-align: center;
+  color: #999;
+}
+
+.loading p {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  padding: 60px 30px;
+  text-align: center;
+  color: #999;
+}
+
+/* ===== ATTENDANCE LIST ===== */
+.attendance-list {
+  padding: 30px;
+}
+
+.attendance-count {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.attendance-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.attendance-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 1;
+  min-width: 0;
+}
+
+.student-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.student-name {
+  font-weight: 600;
+  color: #2c3e50;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-badge {
+  display: inline-block;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ===== ATTENDANCE BUTTONS ===== */
+.attendance-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.attendance-buttons button {
+  padding: 8px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0;
+  box-shadow: none;
+  background: white;
+  color: #666;
+}
+
+.btn-present {
+  border-color: #4facfe;
+  color: #4facfe;
+}
+
+.btn-present:hover:not(:disabled) {
+  background: #4facfe;
+  color: white;
+}
+
+.btn-late {
+  border-color: #fa709a;
+  color: #fa709a;
+}
+
+.btn-late:hover:not(:disabled) {
+  background: #fa709a;
+  color: white;
+}
+
+.btn-absent {
+  border-color: #f5576c;
+  color: #f5576c;
+}
+
+.btn-absent:hover:not(:disabled) {
+  background: #f5576c;
+  color: white;
+}
+
+.btn-justified {
+  border-color: #ffa400;
+  color: #ffa400;
+}
+
+.btn-justified:hover:not(:disabled) {
+  background: #ffa400;
+  color: white;
+}
+
+.attendance-buttons button:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  font-weight: 700;
+}
+
+.btn-present:disabled {
+  background: #4facfe;
+  color: white;
+}
+
+.btn-late:disabled {
+  background: #fa709a;
+  color: white;
+}
+
+.btn-absent:disabled {
+  background: #f5576c;
+  color: white;
+}
+
+.btn-justified:disabled {
+  background: #ffa400;
+  color: white;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .attendance-header {
+    padding: 20px;
+  }
+
+  .attendance-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 15px;
+  }
+
+  .stat-card {
+    padding: 15px;
+  }
+
+  .stat-icon {
+    font-size: 24px;
+  }
+
+  .stat-value {
+    font-size: 20px;
+  }
+
+  .attendance-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .attendance-buttons {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .student-info {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .attendance-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .attendance-buttons {
+    gap: 6px;
+  }
+
+  .attendance-buttons button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
