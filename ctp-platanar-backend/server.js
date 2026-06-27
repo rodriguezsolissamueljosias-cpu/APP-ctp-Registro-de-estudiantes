@@ -5,11 +5,11 @@ const cors = require('cors');
 const sequelize = require('./db');
 
 // Importar modelos
-const Teacher = require('./models/Teacher');
-const Student = require('./models/Student');
-const Attendance = require('./models/Attendance');
-const Grade = require('./models/Grade');
-const Section = require('./models/Section');
+require('./models/Teacher');
+require('./models/Student');
+require('./models/Attendance');
+require('./models/Grade');
+require('./models/Section');
 
 // Importar rutas
 const teacherRoutes = require('./routes/teachers');
@@ -60,14 +60,21 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Sincronizar base de datos y arrancar servidor
-sequelize.sync({ alter: true }) // alter:true actualiza tablas si cambian los modelos
-  .then(() => {
-    console.log('📦 Tablas sincronizadas correctamente');
-    app.listen(PORT, () => {
-      console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+function startServer() {
+  sequelize.sync({ alter: true })
+    .then(() => {
+      console.log('📦 Tablas sincronizadas correctamente');
+      app.listen(PORT, () => {
+        console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+      });
+    })
+    .catch(err => {
+      console.error('❌ Error al sincronizar la base de datos:', err);
     });
-  })
-  .catch(err => {
-    console.error('❌ Error al sincronizar la base de datos:', err);
-  });
+}
+
+if (require.main === module) {
+  startServer();
+}
+
+module.exports = app;

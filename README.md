@@ -63,6 +63,21 @@ ctp-platanar/
    npm run dev        # Desarrollo (con nodemon)
    ```
 
+### Ejecutar todo desde la raíz del repositorio
+1. Instala dependencias desde la raíz:
+   ```bash
+   npm run install-deps
+   ```
+2. Inicia frontend y backend juntos (modo desarrollo):
+   ```bash
+   npm run dev
+   ```
+3. En producción, construye el frontend y luego ejecuta el backend:
+   ```bash
+   npm run build-frontend
+   npm run backend
+   ```
+
 ### Frontend
 
 1. **Instalar dependencias:**
@@ -87,8 +102,13 @@ ctp-platanar/
 
 3. **Ejecutar la aplicación:**
    ```bash
-   npm start          # Abre en http://localhost:3000
+   cd ctp-platanar-frontend
+   npm install
+   npm start          # Inicia el frontend y también el backend automáticamente
    ```
+
+   - Con esta configuración, el comando `npm start` dentro de `ctp-platanar-frontend` ejecuta el backend y abre el frontend en `http://localhost:3000`.
+   - Si ya estás en la raíz del repositorio, también puedes usar `npm run dev` para iniciar ambos servicios desde allí.
 
 ## Despliegue en la nube
 
