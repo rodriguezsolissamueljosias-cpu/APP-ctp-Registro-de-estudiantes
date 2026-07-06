@@ -1,24 +1,24 @@
 {
   "version": 2,
-  "buildCommand": "npm run install-deps && npm run build-frontend",
-  "outputDirectory": "ctp-platanar-frontend/build",
-  "installCommand": "npm install",
-  "builds": [
+  "buildCommand": "cd ctp-platanar-frontend && npm install && npm run build",
+  "installCommand": "npm run install-deps",
+  "public": false,
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "@vercel/node@2"
+    },
+    "ctp-platanar-backend/**/*.js": {
+      "runtime": "@vercel/node@2"
+    }
+  },
+  "rewrites": [
     {
-      "src": "ctp-platanar-frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
+      "source": "/api/(.*)",
+      "destination": "ctp-platanar-backend/server.js"
     },
     {
-      "src": "ctp-platanar-backend/server.js",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "ctp-platanar-frontend/build/index.html"
     }
-  ],
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "ctp-platanar-backend/server.js" },
-    { "source": "/health", "destination": "ctp-platanar-backend/server.js" },
-    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
