@@ -22,7 +22,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "ctp-platanar-frontend/build/index.html"
+      "dest": "/index.html"
     }
   ]
 }
