@@ -7,8 +7,8 @@
     "backend": "cd ctp-platanar-backend && npm start",
     "backend:dev": "cd ctp-platanar-backend && npm run dev",
     "frontend": "cd ctp-platanar-frontend && npm start",
-    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend\"",
+    "start": "node scripts/start-dev.js",
+    "dev": "node scripts/start-dev.js",
     "build-frontend": "cd ctp-platanar-frontend && npm run build",
     "build": "npm run build-frontend",
     "clean": "rmdir /s /q ctp-platanar-frontend\\build 2>nul; exit /b 0"
@@ -17,6 +17,8 @@
     "concurrently": "^8.2.0"
   },
   "dependencies": {
+    "mysql2": "^3.23.1",
+    "sequelize": "^6.37.8",
     "serverless-http": "^4.0.0"
   }
 }

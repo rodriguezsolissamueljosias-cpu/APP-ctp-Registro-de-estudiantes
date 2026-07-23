@@ -14,7 +14,8 @@ export default function RegisteredStudentsDashboard({ teacher }) {
       if (!teacher) return;
       setLoading(true);
       try {
-        const res = await studentAPI.getByTeacher(teacher.teacherId);
+        const teacherId = teacher?.teacherId || teacher?.id;
+      const res = await studentAPI.getByTeacher(teacherId);
         setStudents(res?.data || []);
       } catch (err) {
         console.error(err);
@@ -78,7 +79,7 @@ export default function RegisteredStudentsDashboard({ teacher }) {
                 <tbody>
                   {students.map((student, index) => (
                     <tr key={student.id} className={index % 2 === 0 ? 'even' : 'odd'}>
-                      <td className="student-name">{student.name}</td>
+                      <td className="student-name">{student.name || `${student.firstName || ''} ${student.lastName || ''}`.trim()}</td>
                       <td>{student.grade}</td>
                       <td><span className="section-badge">{student.section}</span></td>
                       <td className="email">{student.studentId || 'N/A'}</td>

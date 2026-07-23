@@ -2,12 +2,13 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Teacher = sequelize.define('Teacher', {
-  teacherId: { type: DataTypes.STRING, allowNull: false, unique: true },
+  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+  teacherId: { type: DataTypes.STRING, unique: true },
   name: { type: DataTypes.STRING, allowNull: false },
-  phone: { type: DataTypes.STRING, allowNull: false },
-  email: { type: DataTypes.STRING, allowNull: false, unique: true },
-  password: { type: DataTypes.STRING, allowNull: false },
-  subject: { type: DataTypes.STRING, allowNull: false }
-});
+  phone: { type: DataTypes.STRING },
+  email: { type: DataTypes.STRING, unique: true },
+  password: { type: DataTypes.STRING }, // aquí puedes usar bcrypt para encriptar
+  subject: { type: DataTypes.STRING }
+}, { tableName: 'Teachers' });
 
 module.exports = Teacher;

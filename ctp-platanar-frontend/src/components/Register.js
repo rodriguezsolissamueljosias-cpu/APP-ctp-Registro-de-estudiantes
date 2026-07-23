@@ -4,12 +4,12 @@ import { teacherAPI } from '../utils/api';
 
 function Register({ setTeacher }) {
   const [formData, setFormData] = useState({
-    teacherId: '',
-    name: '',
-    subject: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
-    password: ''
+    password: '',
+    section: ''
   });
   const [loading, setLoading] = useState(false);
 
@@ -36,24 +36,24 @@ function Register({ setTeacher }) {
   return (
     <form onSubmit={handleSubmit}>
       <input 
-        name="teacherId" 
-        placeholder="ID del profesor (opcional)" 
-        value={formData.teacherId} 
-        onChange={handleChange} 
-      />
-      <input 
-        name="name" 
-        placeholder="Nombre completo" 
-        value={formData.name} 
+        name="firstName" 
+        placeholder="Nombre" 
+        value={formData.firstName} 
         onChange={handleChange} 
         required 
       />
       <input 
-        name="subject" 
-        placeholder="Materia" 
-        value={formData.subject} 
+        name="lastName" 
+        placeholder="Apellido" 
+        value={formData.lastName} 
         onChange={handleChange} 
         required 
+      />
+      <input 
+        name="section" 
+        placeholder="Sección" 
+        value={formData.section} 
+        onChange={handleChange} 
       />
       <input 
         name="email" 

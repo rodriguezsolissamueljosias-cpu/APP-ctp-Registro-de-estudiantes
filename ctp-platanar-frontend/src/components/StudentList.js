@@ -59,7 +59,7 @@ const StudentList = () => {
           {students.map(student => (
             <tr key={student.id}>
                 <td>{student.id}</td>
-                <td>{student.name}</td>
+                <td>{student.name || `${student.firstName || ''} ${student.lastName || ''}`.trim()}</td>
                 <td>{student.grade}</td>
                 <td>{student.status}</td>
               <td>

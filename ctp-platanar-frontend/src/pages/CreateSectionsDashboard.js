@@ -57,10 +57,8 @@ export default function CreateSectionsDashboard() {
     try {
       await sectionAPI.delete(sectionId);
       setSections((prev) => prev.filter((s) => s.id !== sectionId));
-      setError('');
     } catch (err) {
       console.error(err);
-      setError('Error al eliminar la sección');
     }
   };
 

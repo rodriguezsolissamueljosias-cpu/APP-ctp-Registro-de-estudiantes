@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// URL base de la API desde variables de entorno
 const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
-// Crear instancia de axios con configuración base
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -11,21 +9,35 @@ const apiClient = axios.create({
   }
 });
 
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 404) {
+      console.warn('Endpoint no encontrado en el backend:', error.config?.url);
+    }
+    return Promise.reject(error);
+  }
+);
+
 // ==================== TEACHERS ====================
 export const teacherAPI = {
   register: (teacherData) => apiClient.post('/teachers', teacherData),
-  login: (email, password) => apiClient.post('/teachers/login', { email, password }),
+  login: (email, password, accessCode) => apiClient.post('/teachers/login', { email, password, accessCode }),
   getAll: () => apiClient.get('/teachers'),
-  delete: () => apiClient.delete('/teachers')
+  update: (id, data) => apiClient.put(`/teachers/${id}`, data),
+  delete: (id) => apiClient.delete(`/teachers/${id}`),
+  getParentsOverview: () => apiClient.get('/teachers/parents/overview')
 };
 
 // ==================== STUDENTS ====================
 export const studentAPI = {
   create: (studentData) => apiClient.post('/students', studentData),
-  getByTeacher: (teacherId) => apiClient.get(`/students/${teacherId}`),
+  getByTeacher: (teacherId) => apiClient.get(`/students/teacher/${teacherId}`),
   markAttendance: (studentId, attendanceData) => apiClient.put(`/students/${studentId}/attendance`, attendanceData),
   deleteAll: () => apiClient.delete('/students'),
-  delete: (id) => apiClient.delete(`/students/${id}`)
+  delete: (id) => apiClient.delete(`/students/${id}`),
+  getParentsOverview: () => apiClient.get('/students/parents/overview'),
+  deleteParent: (id) => apiClient.delete(`/students/parents/${id}`)
 };
 
 // ==================== ATTENDANCE ====================

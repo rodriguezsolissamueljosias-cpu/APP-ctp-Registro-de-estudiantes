@@ -8,7 +8,7 @@ export default function RegistrarDashboard({ teacher }) {
   const [grade, setGrade] = useState('');
   const [section, setSection] = useState('');
   const [studentId, setStudentId] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [message, setMessage] = useState('');
   const [sections, setSections] = useState([]);
   const [grades, setGrades] = useState([
@@ -45,13 +45,20 @@ export default function RegistrarDashboard({ teacher }) {
       setTimeout(() => setMessage(''), 3000);
       return;
     }
+
+    const trimmedName = name.trim();
+    const nameParts = trimmedName.split(/\s+/).filter(Boolean);
+    const firstName = nameParts[0] || trimmedName;
+    const lastName = nameParts.slice(1).join(' ') || 'Sin apellido';
+
     try {
-      await studentAPI.create({ 
-        name, 
-        grade, 
-        section, 
+      await studentAPI.create({
+        firstName,
+        lastName,
+        grade,
+        section,
         studentId,
-        teacherId: teacher.teacherId 
+        teacherId: teacher?.teacherId || teacher?.id
       });
       setName('');
       setGrade(grades[0] ? grades[0].name : '');

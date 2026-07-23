@@ -23,7 +23,13 @@ function AppContent() {
     }
   });
   const [section, setSection] = useState('9-1');
-  const [schoolLogo, setSchoolLogo] = useState(null);
+  const [schoolLogo, setSchoolLogo] = useState(() => {
+    try {
+      return localStorage.getItem('schoolLogo') || '/logo.png';
+    } catch (e) {
+      return '/logo.png';
+    }
+  });
   const [showSettings, setShowSettings] = useState(false);
   const [onboardingMode, setOnboardingMode] = useState('register');
   const location = useLocation();

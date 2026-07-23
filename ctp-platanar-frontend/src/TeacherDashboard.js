@@ -40,7 +40,7 @@ function TeacherDashboard({ teacher }) {
       <ul className="student-list">
         {students.map((student) => (
           <li key={student.id} className="student-item">
-              {student.name} - Grado: {student.grade} - Sección: {student.section}
+              {student.name || `${student.firstName || ''} ${student.lastName || ''}`.trim()} - Grado: {student.grade} - Sección: {student.section}
               <button style={{ marginLeft: 8, background: '#f5576c', color: '#fff' }} onClick={() => handleDelete(student.id)}>Eliminar</button>
               <div className="attendance-buttons">
                 <button onClick={() => markAttendance(student.id, 'Presente')}>Presente</button>

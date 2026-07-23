@@ -52,8 +52,8 @@ function Attendance({ students }) {
         </thead>
         <tbody>
           {students.map(s => (
-            <tr key={s.id}>
-              <td>{s.name}</td>
+              <tr key={s.id}>
+                <td>{s.name || `${s.firstName || ''} ${s.lastName || ''}`.trim()}</td>
               {allDates.map(date => {
                 const record = grouped[s.id]?.[date];
                 return (

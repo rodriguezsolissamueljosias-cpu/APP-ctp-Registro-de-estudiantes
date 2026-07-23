@@ -14,8 +14,8 @@ export default function AttendanceDashboard({ section, teacher }) {
 
     setLoading(true);
     studentAPI.getByTeacher(teacherId)
-      .then(res => {
-        const filtered = res.data.filter(s => s.section === section);
+      .then(response => {
+        const filtered = response.data.filter(s => s.section === section);
         setStudents(filtered);
         setMarked({});
       })
@@ -25,7 +25,7 @@ export default function AttendanceDashboard({ section, teacher }) {
 
   const markAttendance = async (studentId, status) => {
     try {
-      const res = await studentAPI.markAttendance(studentId, {
+      await studentAPI.markAttendance(studentId, {
         status,
         teacherId,
         date: new Date().toISOString()

@@ -31,7 +31,7 @@ export default function TeacherProfile({ teacher, setSection }) {
         grade, 
         section, 
         parentEmail, 
-        teacherId: teacher.teacherId
+        teacherId: teacher.teacherId || teacher.id
       });
       setStudents([...students, res.data]);
       setName(''); 
@@ -61,8 +61,8 @@ export default function TeacherProfile({ teacher, setSection }) {
   return (
     <div className="container">
       <h2>Perfil del Profesor</h2>
-      <p><strong>Nombre:</strong> {teacher.name}</p>
-      <p><strong>Materia:</strong> {teacher.subject}</p>
+      <p><strong>Nombre:</strong> {`${teacher.firstName || teacher.name || ''} ${teacher.lastName || ''}`.trim()}</p>
+      <p><strong>Sección:</strong> {teacher.section || 'Sin sección'}</p>
 
       <h3>Seleccionar Sección Activa</h3>
       <select value={section} onChange={(e) => { setLocalSection(e.target.value); setSection(e.target.value); }}>

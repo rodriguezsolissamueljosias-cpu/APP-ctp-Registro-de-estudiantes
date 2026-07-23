@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { studentAPI, sectionAPI } from '../utils/api';
+import { studentAPI, sectionAPI, teacherAPI } from '../utils/api';
 import './StudentsDashboard.css';
 
 export default function StudentsDashboard({ teacher, setSection, section }) {
@@ -9,18 +9,26 @@ export default function StudentsDashboard({ teacher, setSection, section }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [sections, setSections] = useState([]);
   const [sectionsLoading, setSectionsLoading] = useState(false);
+  const [parentsOverview, setParentsOverview] = useState([]);
+  const [teachers, setTeachers] = useState([]);
   const navigate = useNavigate();
 
-  const filteredStudents = students.filter(s =>
-    s.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredStudents = (() => {
+    const q = (searchTerm || '').toLowerCase();
+    if (!q) return students;
+    return students.filter(s => {
+      const fullName = (s.name || `${s.firstName || ''} ${s.lastName || ''}`).trim();
+      return fullName.toLowerCase().includes(q);
+    });
+  })();
 
   useEffect(() => {
     const fetch = async () => {
       if (!teacher) return;
       setLoading(true);
       try {
-        const res = await studentAPI.getByTeacher(teacher.teacherId);
+        const teacherId = teacher.teacherId || teacher.id;
+        const res = await studentAPI.getByTeacher(teacherId);
         setStudents(res.data.filter(s => !section || s.section === section));
       } catch (err) {
         console.error(err);
@@ -37,7 +45,6 @@ export default function StudentsDashboard({ teacher, setSection, section }) {
       try {
         const res = await sectionAPI.getAll();
         setSections(res.data || []);
-        // if current section not set or missing, pick first
         if ((!section || !res.data.find(s => s.name === section)) && res.data && res.data.length > 0) {
           setSection(res.data[0].name);
         }
@@ -50,13 +57,67 @@ export default function StudentsDashboard({ teacher, setSection, section }) {
     fetchSections();
   }, [setSection, section]);
 
+  useEffect(() => {
+    const fetchParents = async () => {
+      if (!teacher) return;
+      try {
+        const res = await studentAPI.getParentsOverview();
+        setParentsOverview(res.data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchParents();
+  }, [teacher]);
+
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      if (!teacher?.role === 'admin') return;
+      try {
+        const res = await teacherAPI.getAll();
+        setTeachers(res.data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchTeachers();
+  }, [teacher]);
+
   const handleDelete = async (studentId) => {
     try {
       await studentAPI.delete(studentId);
       setStudents(prev => prev.filter(s => s.id !== studentId));
     } catch (err) {
       console.error(err);
-      alert('Error al eliminar estudiante');
+    }
+  };
+
+  const handleDeleteParent = async (parentId) => {
+    try {
+      await studentAPI.deleteParent(parentId);
+      setParentsOverview(prev => prev.filter(item => item.id !== parentId));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleTeacherStatusChange = async (teacherId, isActive) => {
+    try {
+      await teacherAPI.update(teacherId, { isActive, role: 'teacher' });
+      setTeachers(prev => prev.map(item => item.id === teacherId ? { ...item, isActive } : item));
+      alert(isActive ? 'Profesor activado' : 'Profesor bloqueado');
+    } catch (err) {
+      console.error(err);
+      alert('No se pudo actualizar el profesor');
+    }
+  };
+
+  const handleDeleteTeacher = async (teacherId) => {
+    try {
+      await teacherAPI.delete(teacherId);
+      setTeachers(prev => prev.filter(item => item.id !== teacherId));
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -67,7 +128,7 @@ export default function StudentsDashboard({ teacher, setSection, section }) {
         <div className="dashboard-header">
           <div>
             <h2>📚 Panel de Estudiantes</h2>
-            <p className="header-subtitle">Profesor: {teacher ? `${teacher.name} | ${teacher.subject}` : 'No identificado - por favor inicia sesión'}</p>
+            <p className="header-subtitle">Profesor: {teacher ? `${teacher.firstName || teacher.name || 'Profesor'} ${teacher.lastName || ''}`.trim() : 'No identificado - por favor inicia sesión'}</p>
           </div>
         </div>
 
@@ -124,10 +185,70 @@ export default function StudentsDashboard({ teacher, setSection, section }) {
 
         <div className="students-info">
           <h3>📊 Total de Estudiantes: <span className="count">{students.length}</span></h3>
+          <h3>👨‍👩‍👧‍👦 Padres registrados: <span className="count">{parentsOverview.filter(p => p.parentEmail || p.parentPhone).length}</span></h3>
           {searchTerm && (
             <p className="search-info">Filtrando por: "{searchTerm}"</p>
           )}
         </div>
+
+        {teacher?.role === 'admin' && (
+          <>
+            <div className="table-wrapper" style={{ marginTop: 16 }}>
+              <h3>Gestión de padres</h3>
+              <table className="students-table">
+                <thead>
+                  <tr>
+                    <th>Estudiante</th>
+                    <th>Sección</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {parentsOverview.filter(item => item.parentEmail || item.parentPhone).map(item => (
+                    <tr key={item.id}>
+                      <td>{item.firstName} {item.lastName}</td>
+                      <td>{item.section}</td>
+                      <td>{item.parentEmail || '—'}</td>
+                      <td>{item.parentPhone || '—'}</td>
+                      <td><button onClick={() => handleDeleteParent(item.id)}>Eliminar padre</button></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="table-wrapper" style={{ marginTop: 16 }}>
+              <h3>Gestión de profesores</h3>
+              <table className="students-table">
+                <thead>
+                  <tr>
+                    <th>Profesor</th>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teachers.map(item => (
+                    <tr key={item.id}>
+                      <td>{item.firstName} {item.lastName}</td>
+                      <td>{item.email}</td>
+                      <td>{item.role}</td>
+                      <td>{item.isActive ? 'Activo' : 'Bloqueado'}</td>
+                      <td>
+                        <button onClick={() => handleTeacherStatusChange(item.id, !item.isActive)}>{item.isActive ? 'Bloquear' : 'Activar'}</button>
+                        <button style={{ marginLeft: 8, background: '#f5576c', color: '#fff' }} onClick={() => handleDeleteTeacher(item.id)}>Eliminar</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
 
         {loading ? (
           <div className="loading">
@@ -155,19 +276,17 @@ export default function StudentsDashboard({ teacher, setSection, section }) {
                   <th>👤 Nombre</th>
                   <th>📖 Grado</th>
                   <th>🏢 Sección</th>
-                  <th>🆔 ID</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredStudents.map((s, idx) => (
                   <tr key={s.id} className={idx % 2 === 0 ? 'even' : 'odd'}>
-                    <td className="student-name">{s.name}</td>
+                    <td className="student-name">{s.name || `${s.firstName || ''} ${s.lastName || ''}`.trim()}</td>
                     <td>{s.grade}</td>
                     <td>
                       <span className="section-badge">{s.section}</span>
                     </td>
-                    <td className="email">{s.studentId || 'N/A'}</td>
                     <td>
                       <button style={{ background: '#f5576c', color: '#fff' }} onClick={() => handleDelete(s.id)}>Eliminar</button>
                     </td>
